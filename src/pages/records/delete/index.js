@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function DeleteUser({setUserlist, userlist}) {
+function DeleteUser({ setUserlist, userlist }) {
     const [userIdToDelete, setUserIdToDelete] = useState("");
 
     const handleDelete = () => {
@@ -9,7 +9,6 @@ function DeleteUser({setUserlist, userlist}) {
             axios.delete(`https://dummyjson.com/users/${userIdToDelete}`)
                 .then((response) => {
                     console.log(response.data);
-                    // After successful deletion, fetch updated user list
                     axios.get('https://dummyjson.com/users?limit=200')
                         .then((response) => {
                             setUserlist(response.data.users);
@@ -17,7 +16,6 @@ function DeleteUser({setUserlist, userlist}) {
                         .catch((error) => {
                             console.log(error);
                         });
-                    // Reset user ID to delete
                     setUserIdToDelete("");
                 })
                 .catch((error) => {

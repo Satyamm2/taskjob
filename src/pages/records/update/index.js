@@ -22,7 +22,6 @@ function UpdateUser({ setUserlist }) {
         axios.put(`https://dummyjson.com/users/${userIdToUpdate}`, formData)
             .then((response) => {
                 console.log(response.data);
-                // After successful update, fetch updated user list
                 axios.get('https://dummyjson.com/users?limit=200')
                     .then((response) => {
                         setUserlist(response.data.users);
@@ -30,7 +29,6 @@ function UpdateUser({ setUserlist }) {
                     .catch((error) => {
                         console.log(error);
                     });
-                // Clear form data after submission
                 setFormData({
                     id: "",
                     firstName: "",
