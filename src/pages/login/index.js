@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsername, setPassword, setError, setShowPassword } from '../../redux/slices/login';
 import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../redux/apiSlice/login';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -12,42 +13,90 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const { username, password, error, showPassword } = useSelector((state) => state.login);
+    //api query
+    const [login, { isLoading, isError }] = useLoginMutation();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         const requestBody = {
             username: username,
-            password: password
+            password: password,
         };
 
         try {
-            const response = await fetch('https://dummyjson.com/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-            });
+            const { data } = await login(requestBody);
 
-            if (!response.ok) {
-                const data = await response.json();
-                setError(data.message);
-                return;
-            }
-
-            const data = await response.json();
-            console.log("success");
+            console.log('success');
             const token = data.token;
 
             localStorage.setItem('token', token);
             navigate('/product-list');
         } catch (error) {
             console.error('Error logging in:', error);
-            setError('An error occurred while logging in. Please try again.');
+            dispatch(setError('An error occurred while logging in. Please try again.'));
         }
-
     };
+
+
+
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+
+    //     const requestBody = {
+    //         username: username,
+    //         password: password,
+    //     };
+
+    //     try {
+    //         const { data } = await login(requestBody).unwrap();
+    //         const token = data.token;
+    //         console.log('success');
+
+    //         localStorage.setItem('token', token);
+    //         // dispatch(setToken(token));
+    //         navigate('/product-list');
+    //     } catch (error) {
+    //         console.error('Error logging in:', error);
+    //     }
+    // };
+
+
+
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+
+    //     const requestBody = {
+    //         username: username,
+    //         password: password
+    //     };
+
+    //     try {
+    //         const response = await fetch('https://dummyjson.com/auth/login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(requestBody)
+    //         });
+
+    //         if (!response.ok) {
+    //             const data = await response.json();
+    //             setError(data.message);
+    //             return;
+    //         }
+
+    //         const data = await response.json();
+    //         console.log("success");
+    //         const token = data.token;
+
+    //         localStorage.setItem('token', token);
+    //         navigate('/product-list');
+    //     } catch (error) {
+    //         console.error('Error logging in:', error);
+    //         setError('An error occurred while logging in. Please try again.');
+    //     }
+
+    // };
 
     return (
         <div className="container mx-auto">
