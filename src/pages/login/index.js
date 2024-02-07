@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUsername, setPassword, setError, setShowPassword } from '../../redux/slices/login';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('kminchelle');
-    const [password, setPassword] = useState('0lelplR');
-    const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+    // const [username, setUsername] = useState('kminchelle');
+    // const [password, setPassword] = useState('0lelplR');
+    // const [error, setError] = useState('');
+    // const [showPassword, setShowPassword] = useState(false);
+
+    const dispatch = useDispatch();
+    const { username, password, error, showPassword } = useSelector((state) => state.login);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -53,7 +58,8 @@ const Login = () => {
                     type="text"
                     placeholder="Username"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    // onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => dispatch(setUsername(e.target.value))}
                     className="block border border-gray-300 p-2 mb-2"
                 />
                 <div className="flex gap-1">
@@ -61,12 +67,14 @@ const Login = () => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        // onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => dispatch(setPassword(e.target.value))}
                         className="block border border-gray-300 p-2 mb-2 pr-10"
                     />
                     <button
                         type="button"
-                        onClick={() => setShowPassword(!showPassword)}
+                        // onClick={() => setShowPassword(!showPassword)}
+                        onClick={() => dispatch(setShowPassword(!showPassword))}
                         className="px-3 h-8 bg-gray-200 hover:bg-gray-300"
                     >
                         {showPassword ? 'Hide' : 'Show'}
